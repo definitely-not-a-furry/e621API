@@ -1,0 +1,11 @@
+{
+    "silent-mode": false,
+    "debug-mode": true,
+    "clear-terminal": true,
+    "path": "tmp\\out",
+    "api": null,
+    "login": null,
+    "blacklist": [
+        null
+    ]
+}
