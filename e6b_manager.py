@@ -1,5 +1,5 @@
 "This is a basic app to create/read/write .e6b files"
-from tkinter import Tk, END, Menu, Text, DISABLED
+import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askyesno
 import json
@@ -26,8 +26,8 @@ class Main():
         "Prompts user to select an existing .e6b file"
         self.filename=askopenfilename(filetypes=[('e621 bulk files','*.e6b')])
         self.file=open(self.filename, 'r+',encoding='UTF-8')
-        _text.delete(1.0,END)
-        _text.insert(END,self.decodehex(self.file.read()))
+        _text.delete(1.0,tk.END)
+        _text.insert(tk.END,self.decodehex(self.file.read()))
 
     def filewrite(self,_contents,_file):
         "Writes to .e6b files"
@@ -44,7 +44,7 @@ class Main():
             return
         self.file.close()
         self.file=open(self.filename,'w',encoding='UTF-8')
-        self.file.write(self.encodehex(_text.get(1.0,END)))
+        self.file.write(self.encodehex(_text.get(1.0,tk.END)))
 
     def saveas(self,_text):
         "prompts user to save file with a name"
@@ -70,21 +70,21 @@ class Main():
         if askyesno('Warning','Are you sure you want to quit? Any unsaved changes will be lost.'):
             _root.destroy()
 
-class App(Tk):
+class App(tk.Tk):
     "Main window"
     def __init__(self):
         super().__init__()
-        self.menubar=Menu(root)
+        self.menubar=tk.Menu(root)
 
-        self.text=Text(root)
+        self.text=tk.Text(root)
         self.text.grid()
 
-        self.exportmenu=Menu(self.menubar,tearoff=0)
-        self.file=Menu(self.menubar,tearoff=0)
+        self.exportmenu=tk.Menu(self.menubar,tearoff=0)
+        self.file=tk.Menu(self.menubar,tearoff=0)
         self.menubar.add_cascade(label='File',menu=self.file)
         self.file.add_command(label='Open...',command=lambda:Main.getfile(Main,self.text))
         self.file.add_command(label='Save as...',
-        command=lambda:Main.saveas(Main,self.text.get(1.0,END)))
+        command=lambda:Main.saveas(Main,self.text.get(1.0,tk.END)))
         self.file.add_command(label='Save',command=lambda:Main.save(Main,self.text))
         self.file.add_separator()
         self.file.add_cascade(label='Export...',menu=self.exportmenu)
@@ -94,9 +94,9 @@ class App(Tk):
         self.file.add_separator()
         self.file.add_command(label='Exit',command=lambda:Main.closerootconfirmation(Main,self))
 
-        self.edit=Menu(self.menubar, tearoff=0)
+        self.edit=tk.Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label='Edit',menu=self.edit)
-        self.edit.add_command(label='[None]',state=DISABLED)
+        self.edit.add_command(label='[None]',state=tk.DISABLED)
 
 root=App()
 root.config(menu=App.menubar)
