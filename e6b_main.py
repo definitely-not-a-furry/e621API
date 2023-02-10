@@ -27,16 +27,16 @@ class Main():
         self.filename=askopenfilename(filetypes=[('e621 bulk files','*.e6b')])
         self.file=open(self.filename, 'r+',encoding='UTF-8')
         _text.delete(1.0,tk.END)
-        _text.insert(tk.END,self.decodehex(self.file.read()))
+        _text.insert(tk.END,self.decodehex(self,self.file.read()))
 
     def filewrite(self,_contents,_file):
         "Writes to .e6b files"
-        _file.write(self.encodehex(_contents)+'\n')
+        _file.write(self.encodehex(self,_contents)+'\n')
 
     def fileread(self,_file):
         "Reads .e6b files"
         temp=_file.read().split('\n')
-        return self.decodehex(temp)
+        return self.decodehex(self,temp)
 
     def save(self,_text):
         "Saves file"
@@ -44,13 +44,13 @@ class Main():
             return
         self.file.close()
         self.file=open(self.filename,'w',encoding='UTF-8')
-        self.file.write(self.encodehex(_text.get(1.0,tk.END)))
+        self.file.write(self.encodehex(self,_text.get(1.0,tk.END)))
 
     def saveas(self,_text):
         "prompts user to save file with a name"
         self.file=open(asksaveasfilename(filetypes=(('e621 bulk file','*.e6b'),('All Files','*.*')),
         confirmoverwrite=True),'w',encoding='UTF-8')
-        self.file.write(self.encodehex(_text))
+        self.file.write(self.encodehex(self,_text))
         self.file.close()
 
     def exportfromjson(self):
@@ -63,7 +63,7 @@ class Main():
             links.append(i['file']['url'])
 
         linkstr='\n'.join(links)
-        self.saveas(linkstr)
+        self.saveas(self,linkstr)
 
     def closerootconfirmation(self,_root):
         "Prompts user to make sure they saved their changes"
