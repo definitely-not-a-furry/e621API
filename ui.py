@@ -1,7 +1,9 @@
+import os
+import re
+import json
+
 from tkinter import *
 from tkinter.ttk import *
-
-import os, re, json
 
 colorpalette = ['#152f56','#1f3c67','#020f23','#ffffff']
 
@@ -11,9 +13,9 @@ order = ''
 rating = ''
 ftype = ''
 incldel = False
-silent_mode = json.load(open('config.json'))['silent-mode']
-debug_mode = json.load(open('config.json'))['debug-mode']
-clear_terminal = json.load(open('config.json'))['clear-terminal']
+silent_mode = json.load(open('config.json',encoding='UTF-8'))['silent-mode']
+debug_mode = json.load(open('config.json',encoding='UTF-8'))['debug-mode']
+clear_terminal = json.load(open('config.json',encoding='UTF-8'))['clear-terminal']
 
 ordermodes = ['no ordering','id','score','favcount','tagcount','comment_count','comment_bumped','mpixels','filesize','landscape','change','duration','random','score_asc','favcount_asc','tagcount_asc','comment_count_asc','comment_bumped_asc','mpixels_asc','filesize_asc','portrait','duration_asc']
 ratingmodes = ['all','explicit','safe','questionable','-explicit','-safe','-questionable']
@@ -44,9 +46,9 @@ def verifyinput(_order,_rating,_filetype,_amount,_tags):
     x = '+'.join(tags)
     x = f'{order}+{rating}+{ftype}+{x}'
     x = re.split("[+]", x)
-    while("" in x):
+    while "" in x:
         x.remove("")
-    while("None" in x):
+    while "None" in x:
         x.remove("None")
     tags = '+'.join(x)
     tags = tags.replace('\n','')
@@ -92,7 +94,7 @@ limitint = Entry(root, validate = 'key', style = 'c.TEntry')
 limitint['validatecommand'] = (limitint.register(testVal),'%P','%d')
 
 ordermode = Combobox(root, style = 'c.TCombobox')
-ordermode['values']=(ordermodes)
+ordermode['values']= ordermodes
 ordermode.current(0)
 
 ratingmode = Combobox(root, style = 'c.TCombobox')
