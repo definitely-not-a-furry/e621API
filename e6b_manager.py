@@ -6,9 +6,9 @@ class App(tk.Tk):
     "Main window"
     def __init__(self):
         super().__init__()
-        self.menubar=tk.Menu(root)
+        self.menubar=tk.Menu(self)
 
-        self.text=tk.Text(root)
+        self.text=tk.Text(self)
         self.text.grid()
 
         self.exportmenu=tk.Menu(self.menubar,tearoff=0)
@@ -29,9 +29,9 @@ class App(tk.Tk):
         self.edit=tk.Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label='Edit',menu=self.edit)
         self.edit.add_command(label='[None]',state=tk.DISABLED)
+        self.config(menu=self.menubar)
 
 root=App()
-root.config(menu=App.menubar)
 root.mainloop()
 
 try:
