@@ -7,6 +7,21 @@ from tkinter.ttk import *
 
 colorpalette=['#152f56','#1f3c67','#020f23','#ffffff']
 
+class QLabel(Label):
+    def __init__(self,_root,_contents,_gridx,_gridy):
+        super().__init__()
+        super().configure(text=_contents,foreground=colorpalette[3],background=colorpalette[0])
+        super().grid(column=_gridx,row=_gridy,sticky=W)
+
+class QButton(Button):
+    def __init__(self,_root,_contents,_command,_gridx,_gridy):
+        super().__init__()
+        super().configure(text=_contents,command=_command,foreground=colorpalette[3],background=colorpalette[0])
+        super().grid(column=_gridx,row=_gridy,sticky=W)
+
+def QGrid(object,gridx,gridy):
+    object.grid(column=gridx,row=gridy,sticky=W+E)
+
 def clear():
     "Clears terminal"
     os.system('cls')
@@ -22,7 +37,7 @@ minusratings=['-explicit','-safe','-questionable']
 
 if clear_terminal:
     clear()
-    
+
 def verifyinput(_order,_rating,_filetype,_amount,_tags):
     if _order == 'no ordering' or _order not in ordermodes:
         order=None
@@ -104,17 +119,18 @@ filetype.current(0)
 
 
 verifybtn=Button(root,text='Done',command=lambda:verifyinput(ordermode.get(),ratingmode.get(),filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
-Label(root,text='Tags:',background=colorpalette[0],foreground=colorpalette[3]).grid(row=0,column=0,sticky=W)
+
+QLabel(root,'Tags: ',0,0)
 tagsin.grid(row=1,columnspan=2,sticky=W+E)
-Label(root,text='Limit: ',background=colorpalette[0],foreground=colorpalette[3]).grid(row=2,column=0,sticky=W)
-limitint.grid(row=2,column=1,sticky=W+E)
-Label(root,text='order:',background=colorpalette[0],foreground=colorpalette[3]).grid(row=4,column=0,sticky=W)
-ordermode.grid(row=4,column=1,sticky=W+E)
-Label(root,text='rating:',background=colorpalette[0],foreground=colorpalette[3]).grid(row=5,column=0,sticky=W)
-ratingmode.grid(row=5,column=1,sticky=W+E)
-Label(root,text='type:',background=colorpalette[0],foreground=colorpalette[3]).grid(row=6,column=0,sticky=W)
+QLabel(root,'Limit: ',0,2)
+QGrid(limitint,1,2)
+QLabel(root,'Order: ',0,4)
+QGrid(ordermode,1,4)
+QLabel(root,'Rating: ',0,5)
+QGrid(ratingmode,1,5)
+QLabel(root,'Type: ',0,6)
 filetype.grid(row=6,column=1,sticky=W+E)
-Button(text='Close',command=root.destroy(),style='c.TButton').grid(row=7,column=1,sticky=W)
+Button(text='Close',command=lambda:root.destroy(),style='c.TButton').grid(row=7,column=1,sticky=W)
 verifybtn.grid(row=7,column=0,sticky=W+E)
 
 root.mainloop()
