@@ -12,9 +12,9 @@ path = config['path']
 filenames = []
 
 #url = "https://static1.e621.net/data/af/30/af30659e164e085c745814bf1174cafb.gif" # temporary testing link (cute fops :3)
-urls = open('tmp\\links',encoding='utf-8').read().split('\n')
+urls = open('tmp\\links',encoding='UTF-8').read().split('\n')
 
-if urls == '':
+if urls is '':
     print('No posts found')
     os.system('pause')
 

@@ -1,9 +1,9 @@
-from tkinter import *
-from tkinter.ttk import *
-
 import os
 import re
 import json
+
+from tkinter import *
+from tkinter.ttk import *
 
 colorpalette=['#152f56','#1f3c67','#020f23','#ffffff']
 
