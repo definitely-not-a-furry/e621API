@@ -23,7 +23,8 @@ class QButton(Button):
                           foreground=colorpalette[3],background=colorpalette[0])
         super().grid(column=_gridx,row=_gridy,sticky=W)
 
-def QGrid(_object,gridx,gridy):
+def q_grid(_object,gridx,gridy):
+    "Quick grid assignment"
     _object.grid(column=gridx,row=gridy,sticky=W+E)
 
 def clear():
@@ -34,7 +35,10 @@ silent_mode=json.load(open('config.json',encoding='UTF-8'))['silent-mode']
 debug_mode=json.load(open('config.json',encoding='UTF-8'))['debug-mode']
 clear_terminal=json.load(open('config.json',encoding='UTF-8'))['clear-terminal']
 
-ordermodes=['no ordering','id','score','favcount','tagcount','comment_count','comment_bumped','mpixels','filesize','landscape','change','duration','random','score_asc','favcount_asc','tagcount_asc','comment_count_asc','comment_bumped_asc','mpixels_asc','filesize_asc','portrait','duration_asc']
+ordermodes=['no ordering','id','score','favcount','tagcount','comment_count','comment_bumped',
+            'mpixels','filesize','landscape','change','duration','random','score_asc',
+            'favcount_asc','tagcount_asc','comment_count_asc','comment_bumped_asc','mpixels_asc',
+            'filesize_asc','portrait','duration_asc']
 ratingmodes=['all','explicit','safe','questionable','-explicit','-safe','-questionable']
 filetypes=['all','jpg','png','gif','swf','webm']
 minusratings=['-explicit','-safe','-questionable']
@@ -43,6 +47,7 @@ if clear_terminal:
     clear()
 
 def verifyinput(_order,_rating,_filetype,_amount,_tags):
+    "Build the string to prepare for request"
     if _order == 'no ordering' or _order not in ordermodes:
         order=None
     else:
@@ -59,14 +64,14 @@ def verifyinput(_order,_rating,_filetype,_amount,_tags):
         ftype=f'filetype:{_filetype}'
 
     tags=_tags.split()
-    x='+'.join(tags)
-    x=f'{order}+{rating}+{ftype}+{x}'
-    x=re.split("[+]",x)
-    while "" in x:
-        x.remove("")
-    while "None" in x:
-        x.remove("None")
-    tags='+'.join(x)
+    tags='+'.join(tags)
+    tags=f'{order}+{rating}+{ftype}+{tags}'
+    tags=re.split("[+]",tags)
+    while "" in tags:
+        tags.remove("")
+    while "None" in tags:
+        tags.remove("None")
+    tags='+'.join(tags)
     tags=tags.replace('\n','')
 
     if _amount == '':
@@ -88,9 +93,10 @@ def verifyinput(_order,_rating,_filetype,_amount,_tags):
     os.system(f'python get.py "{tags}" "{amount}"')
     root.destroy()
 
-def testVal(inStr,acttyp):
+def test_val(in_str,acttyp):
+    "limits input to only numbers"
     if acttyp == '1':
-        if not inStr.isdigit():
+        if not in_str.isdigit():
             return False
     return True
 
@@ -107,7 +113,7 @@ style.configure('c.TEntry',background=colorpalette[0])
 tagsin=Text(root,height=10,width=30,background=colorpalette[1],foreground='white')
 
 limitint=Entry(root,validate='key',style='c.TEntry')
-limitint['validatecommand']=(limitint.register(testVal),'%P','%d')
+limitint['validatecommand']=(limitint.register(test_val),'%P','%d')
 
 ordermode=Combobox(root,style='c.TCombobox')
 ordermode['values']=ordermodes
@@ -122,19 +128,20 @@ filetype['values']=filetypes
 filetype.current(0)
 
 
-verifybtn=Button(root,text='Done',command=lambda:verifyinput(ordermode.get(),ratingmode.get(),filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
+verifybtn=Button(root,text='Done',command=lambda:verifyinput(ordermode.get(),ratingmode.get(),
+                 filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
 
 QLabel(root,'Tags: ',0,0)
-QGrid(tagsin,0,1)
+q_grid(tagsin,0,1)
 QLabel(root,'Limit: ',0,2)
-QGrid(limitint,1,2)
+q_grid(limitint,1,2)
 QLabel(root,'Order: ',0,4)
-QGrid(ordermode,1,4)
+q_grid(ordermode,1,4)
 QLabel(root,'Rating: ',0,5)
-QGrid(ratingmode,1,5)
+q_grid(ratingmode,1,5)
 QLabel(root,'Type: ',0,6)
-QGrid(filetype,1,6)
-QGrid(verifybtn,0,7)
+q_grid(filetype,1,6)
+q_grid(verifybtn,0,7)
 verifybtn.grid(columnspan=2)
 tagsin.grid(columnspan=2)
 root.mainloop()
