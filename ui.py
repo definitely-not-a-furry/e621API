@@ -1,26 +1,30 @@
+"The UI module for e621API"
 import os
 import re
 import json
 
-from tkinter import *
-from tkinter.ttk import *
+from tkinter import Label, Tk, Text, END, W, E
+from tkinter.ttk import Combobox, Style, Button, Entry
 
 colorpalette=['#152f56','#1f3c67','#020f23','#ffffff']
 
 class QLabel(Label):
+    "Quick label creation for improved code readability"
     def __init__(self,_root,_contents,_gridx,_gridy):
         super().__init__()
         super().configure(text=_contents,foreground=colorpalette[3],background=colorpalette[0])
         super().grid(column=_gridx,row=_gridy,sticky=W)
 
 class QButton(Button):
+    "Quick button creation for improved code readability"
     def __init__(self,_root,_contents,_command,_gridx,_gridy):
         super().__init__()
-        super().configure(text=_contents,command=_command,foreground=colorpalette[3],background=colorpalette[0])
+        super().configure(text=_contents,command=_command,
+                          foreground=colorpalette[3],background=colorpalette[0])
         super().grid(column=_gridx,row=_gridy,sticky=W)
 
-def QGrid(object,gridx,gridy):
-    object.grid(column=gridx,row=gridy,sticky=W+E)
+def QGrid(_object,gridx,gridy):
+    _object.grid(column=gridx,row=gridy,sticky=W+E)
 
 def clear():
     "Clears terminal"
@@ -121,7 +125,7 @@ filetype.current(0)
 verifybtn=Button(root,text='Done',command=lambda:verifyinput(ordermode.get(),ratingmode.get(),filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
 
 QLabel(root,'Tags: ',0,0)
-tagsin.grid(row=1,columnspan=2,sticky=W+E)
+QGrid(tagsin,0,1)
 QLabel(root,'Limit: ',0,2)
 QGrid(limitint,1,2)
 QLabel(root,'Order: ',0,4)
@@ -129,8 +133,8 @@ QGrid(ordermode,1,4)
 QLabel(root,'Rating: ',0,5)
 QGrid(ratingmode,1,5)
 QLabel(root,'Type: ',0,6)
-filetype.grid(row=6,column=1,sticky=W+E)
-Button(text='Close',command=lambda:root.destroy(),style='c.TButton').grid(row=7,column=1,sticky=W)
-verifybtn.grid(row=7,column=0,sticky=W+E)
-
+QGrid(filetype,1,6)
+QGrid(verifybtn,0,7)
+verifybtn.grid(columnspan=2)
+tagsin.grid(columnspan=2)
 root.mainloop()
