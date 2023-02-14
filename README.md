@@ -2,7 +2,7 @@
 ---
 e621API is a program that can be used to download large amounts of media (pictures, videos, flash media etc.) from [e621.net](https://e621.net/).
 The name might be a little bit misleading: e621API is **not** an application programming interface for e621.
-Included with e621API is another program (e6b_manager) that can be used to view and edit `.e6b` files 
+Included with e621API is another program (e6b_manager) that can be used to view and edit [`.e6b` files](https://github.com/definitely-not-a-furry/e621API/blob/main/README.md#e6b-files) 
 
 `config.json`
 ---
