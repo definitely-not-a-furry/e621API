@@ -6,56 +6,42 @@ import json
 
 class Main():
     "Main functions"
-    file=None
     filename=None
 
     def __init__(self):
         pass
 
     def encodehex(self,_in):
-        "Encodes to hexadecimal strings"
-        _out=hex(int.from_bytes(_in.encode(), 'big'))[2:]
-        return _out
+        "Encodes input to hexadecimal"
+        return format(int.from_bytes(_in.encode()),'x')
 
     def decodehex(self,_in):
-        "Decodes hexadecimal strings"
-        _out=bytes.fromhex(_in).decode()
-        return _out
+        "Decodes hexadecimal input"
+        return bytes.fromhex(_in).decode()
 
     def getfile(self,_text):
         "Prompts user to select an existing .e6b file"
         self.filename=askopenfilename(filetypes=[('e621 bulk files','*.e6b')])
-        self.file=open(self.filename, 'r+',encoding='UTF-8')
-        _text.delete(1.0,tk.END)
-        _text.insert(tk.END,self.decodehex(self,self.file.read()))
-
-    def filewrite(self,_contents,_file):
-        "Writes to .e6b files"
-        _file.write(self.encodehex(self,_contents)+'\n')
+        with open(self.filename, 'r+',encoding='UTF-8') as file:
+            _text.delete(1.0,tk.END)
+            _text.insert(tk.END,self.decodehex(file.read()))
 
     def fileread(self,_file):
         "Reads .e6b files"
-        temp=_file.read().split('\n')
-        return self.decodehex(self,temp)
-
-    def save(self,_text):
-        "Saves file"
-        if self.file is None:
-            return
-        self.file.close()
-        self.file=open(self.filename,'w',encoding='UTF-8')
-        self.file.write(self.encodehex(self,_text.get(1.0,tk.END)))
+        return self.decodehex(_file.read().split('\n'))
 
     def saveas(self,_text):
-        "prompts user to save file with a name"
-        self.file=open(asksaveasfilename(filetypes=(('e621 bulk file','*.e6b'),('All Files','*.*')),
-        confirmoverwrite=True),'w',encoding='UTF-8')
-        self.file.write(self.encodehex(self,_text))
-        self.file.close()
+        "Prompts user to save file with a name"
+        self.filename = asksaveasfilename(filetypes=(('e621 bulk file','*.e6b'),
+        ('All Files','*.*')),confirmoverwrite=True)
+        
+        with open(self.filename,'r+',encoding='UTF-8') as file:
+            file.write(self.encodehex(_text))
 
     def exportfromjson(self):
         "Exports and filters links from a posts.json file"
-        posts=json.load(open('tmp\\posts.json',encoding='UTF-8'))
+        with open('tmp\\posts.json',encoding='UTF-8') as file:
+            posts=json.load(file)
         links=[]
         linkstr=str()
 
@@ -63,7 +49,7 @@ class Main():
             links.append(i['file']['url'])
 
         linkstr='\n'.join(links)
-        self.saveas(self,linkstr)
+        self.saveas(linkstr)
 
     def closerootconfirmation(self,_root):
         "Prompts user to make sure they saved their changes"

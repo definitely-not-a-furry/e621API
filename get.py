@@ -1,6 +1,12 @@
-import requests, os, json, sys
+"Request posts.json"
+import os
+import json
+import sys
+import requests
 
-config = json.load(open('config.json',encoding='UTF-8'))
+with open('config.json',encoding='UTF-8') as f:
+    config = json.load(f)
+
 header_name = config['header-name']
 header_version = config['header-version']
 username = config['username']
@@ -23,15 +29,17 @@ file = file.json()
 with open('tmp\\posts.json','w',encoding='UTF-8') as f:
     json.dump(file, f)
 
-posts = json.load(open('tmp\\posts.json',encoding='UTF-8'))
-links = list()
+with open('tmp\\posts.json',encoding='UTF-8') as f:
+    posts = json.load(f)
+
+links = []
 
 for i in posts['posts']:
     links.append(i['file']['url'])
     if config['debug-mode'] is True:
         print(i['file']['url'])
 
-if config['silent-mode'] is False or config['debug-mode'] is True:
+if not config['silent-mode'] or config['debug-mode']:
     print(f'Links: {str(links)}')
 
 if os.path.exists('tmp\\links'):

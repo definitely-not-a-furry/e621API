@@ -17,7 +17,6 @@ class App(tk.Tk):
         self.file.add_command(label='Open...',command=lambda:Main.getfile(Main,self.text))
         self.file.add_command(label='Save as...',
         command=lambda:Main.saveas(Main,self.text.get(1.0,tk.END)))
-        self.file.add_command(label='Save',command=lambda:Main.save(Main,self.text))
         self.file.add_separator()
         self.file.add_cascade(label='Export...',menu=self.exportmenu)
         self.exportmenu.add_command(label='Export .json to .e6b',
@@ -33,8 +32,3 @@ class App(tk.Tk):
 
 root=App()
 root.mainloop()
-
-try:
-    Main.file.close()
-finally:
-    print('NoFile')

@@ -15,14 +15,6 @@ class QLabel(Label):
         super().configure(text=_contents,foreground=colorpalette[3],background=colorpalette[0])
         super().grid(column=_gridx,row=_gridy,sticky=W)
 
-class QButton(Button):
-    "Quick button creation for improved code readability"
-    def __init__(self,_root,_contents,_command,_gridx,_gridy):
-        super().__init__()
-        super().configure(text=_contents,command=_command,
-                          foreground=colorpalette[3],background=colorpalette[0])
-        super().grid(column=_gridx,row=_gridy,sticky=W)
-
 def q_grid(_object,gridx,gridy):
     "Quick grid assignment"
     _object.grid(column=gridx,row=gridy,sticky=W+E)
@@ -31,9 +23,10 @@ def clear():
     "Clears terminal"
     os.system('cls')
 
-silent_mode=json.load(open('config.json',encoding='UTF-8'))['silent-mode']
-debug_mode=json.load(open('config.json',encoding='UTF-8'))['debug-mode']
-clear_terminal=json.load(open('config.json',encoding='UTF-8'))['clear-terminal']
+with json.load(open('config.json',encoding='UTF-8')) as f:
+    silent_mode=f['silent-mode']
+    debug_mode=f['debug-mode']
+    clear_terminal=f['clear-terminal']
 
 ordermodes=['no ordering','id','score','favcount','tagcount','comment_count','comment_bumped',
             'mpixels','filesize','landscape','change','duration','random','score_asc',
@@ -83,7 +76,7 @@ def verifyinput(_order,_rating,_filetype,_amount,_tags):
         if not silent_mode or debug_mode:
             print('The hard-limit of posts per session is 320.')
 
-    if not silent_mode or debug_mode:
+    if debug_mode:
         print('Summary:')
         print(f'- tags: {tags}')
         print(f'- ordering by: {order}')
@@ -104,8 +97,8 @@ root=Tk()
 root.title('e621 bulk downloader selection UI')
 root.configure(background=colorpalette[0])
 root.attributes('-toolwindow',True)
-style=Style()
 
+style=Style()
 style.configure('c.TCombobox',background=colorpalette[0])
 style.configure('c.TButton',background=colorpalette[0])
 style.configure('c.TEntry',background=colorpalette[0])
