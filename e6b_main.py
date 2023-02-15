@@ -1,5 +1,5 @@
 "Module for e6b_manager.py"
-import tkinter as tk
+from tkinter import END
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askyesno
 import json
@@ -22,9 +22,9 @@ class Main():
     def getfile(self,_text):
         "Prompts user to select an existing .e6b file"
         self.filename=askopenfilename(filetypes=[('e621 bulk files','*.e6b')])
-        with open(self.filename, 'r+',encoding='UTF-8') as file:
-            _text.delete(1.0,tk.END)
-            _text.insert(tk.END,self.decodehex(file.read()))
+        with open(self.filename,'r+',encoding='UTF-8') as file:
+            _text.delete(1.0,END)
+            _text.insert(END,self.decodehex(file.read()))
 
     def fileread(self,_file):
         "Reads .e6b files"
@@ -34,7 +34,7 @@ class Main():
         "Prompts user to save file with a name"
         self.filename = asksaveasfilename(filetypes=(('e621 bulk file','*.e6b'),
         ('All Files','*.*')),confirmoverwrite=True)
-        
+
         with open(self.filename,'r+',encoding='UTF-8') as file:
             file.write(self.encodehex(_text))
 
@@ -43,13 +43,11 @@ class Main():
         with open('tmp\\posts.json',encoding='UTF-8') as file:
             posts=json.load(file)
         links=[]
-        linkstr=str()
 
         for i in posts['posts']:
             links.append(i['file']['url'])
 
-        linkstr='\n'.join(links)
-        self.saveas(linkstr)
+        self.saveas('\n'.join(links))
 
     def closerootconfirmation(self,_root):
         "Prompts user to make sure they saved their changes"
