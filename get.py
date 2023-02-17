@@ -3,6 +3,7 @@ import os
 import json
 import sys
 import requests
+import download
 
 with open('config.json',encoding='UTF-8') as f:
     config = json.load(f)
@@ -48,4 +49,4 @@ if os.path.exists('tmp\\links'):
 with open('tmp\\links','w',encoding='UTF-8') as file:
     file.write('\n'.join(links))
 
-os.system('python download.py')
+download.Download()

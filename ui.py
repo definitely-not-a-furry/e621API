@@ -7,10 +7,11 @@ from tkinter import Label, Tk, Text, END, W, E
 from tkinter.ttk import Combobox, Style, Button, Entry
 
 colorpalette=['#152f56','#1f3c67','#020f23','#ffffff']
+# this is going to be used for themes in te future
 
 class QLabel(Label):
     "Quick label creation for improved code readability"
-    def __init__(self,_root,_contents,_gridx,_gridy):
+    def __init__(self,_contents,_gridx,_gridy):
         super().__init__()
         super().configure(text=_contents,foreground=colorpalette[3],background=colorpalette[0])
         super().grid(column=_gridx,row=_gridy,sticky=W)
@@ -60,7 +61,9 @@ def verifyinput(_order,_rating,_filetype,_amount,_tags):
     tags='+'.join(tags)
     tags=f'{order}+{rating}+{ftype}+{tags}'
     tags=re.split("[+]",tags)
-    while "" in tags:
+
+    # I did this even though it is not necessary; e621 ignores double '+' and 'None':
+    while "" in tags: 
         tags.remove("")
     while "None" in tags:
         tags.remove("None")
@@ -72,7 +75,7 @@ def verifyinput(_order,_rating,_filetype,_amount,_tags):
     else:
         amount=int(_amount)
     if amount >= 321:
-        amount=320
+        amount=320 # probably not necessary but just in case
         if not silent_mode or debug_mode:
             print('The hard-limit of posts per session is 320.')
 
@@ -122,17 +125,17 @@ filetype.current(0)
 
 
 verifybtn=Button(root,text='Done',command=lambda:verifyinput(ordermode.get(),ratingmode.get(),
-                 filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
+filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
 
-QLabel(root,'Tags: ',0,0)
+QLabel('Tags: ',0,0)
 q_grid(tagsin,0,1)
-QLabel(root,'Limit: ',0,2)
+QLabel('Limit: ',0,2)
 q_grid(limitint,1,2)
-QLabel(root,'Order: ',0,4)
+QLabel('Order: ',0,4)
 q_grid(ordermode,1,4)
-QLabel(root,'Rating: ',0,5)
+QLabel('Rating: ',0,5)
 q_grid(ratingmode,1,5)
-QLabel(root,'Type: ',0,6)
+QLabel('Type: ',0,6)
 q_grid(filetype,1,6)
 q_grid(verifybtn,0,7)
 verifybtn.grid(columnspan=2)
