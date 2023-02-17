@@ -21,7 +21,9 @@ class App(tk.Tk):
         self.file.add_cascade(label='Export...',menu=self.exportmenu)
         self.exportmenu.add_command(label='Export .json to .e6b',
         command=lambda:Main.exportfromjson(Main))
-        self.exportmenu.add_command(label='Export .e6b to download links')
+        self.exportmenu.add_command(label='Export .e6b to download links',
+        command=lambda:Main.exportanddownload(Main,
+        self.text.get(1.0,tk.END)))
         self.file.add_separator()
         self.file.add_command(label='Exit',command=lambda:Main.closerootconfirmation(Main,self))
 

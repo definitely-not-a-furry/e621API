@@ -3,6 +3,7 @@ from tkinter import END
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askyesno
 import json
+import download
 
 class Main():
     "Main functions"
@@ -48,6 +49,12 @@ class Main():
             links.append(i['file']['url'])
 
         self.saveas('\n'.join(links))
+
+    def exportanddownload(self,_text):
+        "Exports input links to the file 'tmp\\links'"
+        with open('tmp\\links','w',encoding='UTF-8') as file:
+            file.write(_text)
+        download.Download()
 
     def closerootconfirmation(self,_root):
         "Prompts user to make sure they saved their changes"

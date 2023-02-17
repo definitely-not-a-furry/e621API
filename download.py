@@ -1,5 +1,6 @@
 "Download files from links"
 import os
+import sys
 import json
 from time import sleep
 import requests
@@ -17,40 +18,43 @@ path = config['path']
 
 filenames = []
 
-#temporary testing link (cute fox :3):
-#url = "https://static1.e621.net/data/af/30/af30659e164e085c745814bf1174cafb.gif"
+class Download():
+    "downloads files from urls"
+    def __init__(self):
+        if urls == '':
+            print('No posts found')
+            os.system('pause')
+            print('exiting...')
+            sys.exit()
 
+        if not os.path.exists(path): # create folder if it does not exist
+            os.makedirs(path)
 
-if urls == '':
-    print('No posts found')
-    os.system('pause')
+        for i in urls:
+            file_path=(os.path.join(path,self.removeprefix(i)))
+            try:
+                request = requests.get(i, stream=True,timeout=10)
+            except ConnectionError as exc:
+                raise ConnectionError('''Was unable to access file.
+                Check if the website is accessible using a browser.''') from exc
+            if request.ok:
+                if silent_mode is False and debug_mode is False:
+                    print(i)
+                elif debug_mode is True:
+                    print(f'Downloading "{i}" to "{file_path}"')
+                with open(file_path, 'wb') as file:
+                    for chunk in request.iter_content(chunk_size=1024 * 8):
+                        if chunk:
+                            file.write(chunk)
+                            file.flush()
+                            os.fsync(file.fileno())
+            else:
+                print(f"Download failed: status code {request.status_code}\n{request.text}")
+            if debug_mode:
+                print(f'Sleeping for {rate_limit} second...')
+            sleep(rate_limit)
 
-def removeprefix(item):
-    "removes first characters of the url i.e. https://static1/e621.net/af/34/"
-    filename = item[29:]
-    return filename
-
-if not os.path.exists(path): # create folder if it does not exist
-    os.makedirs(path)
-
-for i in urls:
-    file_path=(os.path.join(path,removeprefix(i)))
-    try:
-        r = requests.get(i, stream=True,timeout=10)
-    except ConnectionError as e:
-        raise ConnectionError('''Was unable to access file.
-        Check if the website is accessible using a browser.''') from e
-    if r.ok:
-        if silent_mode is False and debug_mode is False:
-            print(i)
-        elif debug_mode is True:
-            print(f'Downloading "{i}" to "{file_path}"')
-        with open(file_path, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024 * 8):
-                if chunk:
-                    f.write(chunk)
-                    f.flush()
-                    os.fsync(f.fileno())
-    else:
-        print(f"Download failed: status code {r.status_code}\n{r.text}")
-    sleep(rate_limit)
+    def removeprefix(self,item):
+        "removes domain and directory from url"
+        filename = item[29:]
+        return filename
