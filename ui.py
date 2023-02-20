@@ -7,7 +7,7 @@ from tkinter import Label, Tk, Text, END, W, E
 from tkinter.ttk import Combobox, Style, Button, Entry
 
 colorpalette=['#152f56','#1f3c67','#020f23','#ffffff']
-# this is going to be used for themes in te future
+# this is going to be used for themes in the future
 
 class QLabel(Label):
     "Quick label creation for improved code readability"
@@ -24,7 +24,8 @@ def clear():
     "Clears terminal"
     os.system('cls')
 
-with json.load(open('config.json',encoding='UTF-8')) as f:
+with open('config.json') as f:
+    f=json.load(f)
     silent_mode=f['silent-mode']
     debug_mode=f['debug-mode']
     clear_terminal=f['clear-terminal']
@@ -40,40 +41,40 @@ minusratings=['-explicit','-safe','-questionable']
 if clear_terminal:
     clear()
 
-def verifyinput(_order,_rating,_filetype,_amount,_tags):
+def verifyinput(order,rating,filetype,amount,tags):
     "Build the string to prepare for request"
-    if _order == 'no ordering' or _order not in ordermodes:
+    if order == 'no ordering' or order not in ordermodes:
         order=None
     else:
-        order=f'order:{_order}'
-    if _rating == 'all' or _rating not in ratingmodes:
+        order=f'order:{order}'
+    if rating == 'all' or rating not in ratingmodes:
         rating=None
-    elif _rating in minusratings:
-        rating=f'-rating:{(minusratings.index(_rating))[1:]}'
+    elif rating in minusratings:
+        rating=f'-rating:{(minusratings.index(rating))[1:]}'
     else:
-        rating=f'rating:{_rating}'
-    if _filetype == 'all' or _filetype not in filetypes:
+        rating=f'rating:{rating}'
+    if filetype == 'all' or filetype not in filetypes:
         ftype=None
     else:
-        ftype=f'filetype:{_filetype}'
+        ftype=f'filetype:{filetype}'
 
-    tags=_tags.split()
+    tags=tags.split()
     tags='+'.join(tags)
     tags=f'{order}+{rating}+{ftype}+{tags}'
     tags=re.split("[+]",tags)
 
     # I did this even though it is not necessary; e621 ignores double '+' and 'None':
-    while "" in tags: 
+    while "" in tags:
         tags.remove("")
     while "None" in tags:
         tags.remove("None")
     tags='+'.join(tags)
     tags=tags.replace('\n','')
 
-    if _amount == '':
+    if amount == None:
         amount=0
     else:
-        amount=int(_amount)
+        amount=int(amount)
     if amount >= 321:
         amount=320 # probably not necessary but just in case
         if not silent_mode or debug_mode:
@@ -111,21 +112,17 @@ tagsin=Text(root,height=10,width=30,background=colorpalette[1],foreground='white
 limitint=Entry(root,validate='key',style='c.TEntry')
 limitint['validatecommand']=(limitint.register(test_val),'%P','%d')
 
-ordermode=Combobox(root,style='c.TCombobox')
-ordermode['values']=ordermodes
-ordermode.current(0)
+ordermode=Combobox(root,style='c.TCombobox',values=ordermodes)
+ordermode.current(2)
 
-ratingmode=Combobox(root,style='c.TCombobox')
-ratingmode['values']=ratingmodes
-ratingmode.current(0)
+ratingmode=Combobox(root,style='c.TCombobox',values=ratingmodes)
+ratingmode.current(2)
 
-filetype=Combobox(root,style='c.TCombobox')
-filetype['values']=filetypes
+filetype=Combobox(root,style='c.TCombobox',values=filetypes)
 filetype.current(0)
 
-
 verifybtn=Button(root,text='Done',command=lambda:verifyinput(ordermode.get(),ratingmode.get(),
-filetype.get(),limitint.get(),tagsin.get(1.0,END)),style='c.TButton')
+filetype.get(),int(limitint.get()),tagsin.get(1.0,END)),style='c.TButton')
 
 QLabel('Tags: ',0,0)
 q_grid(tagsin,0,1)
