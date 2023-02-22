@@ -1,6 +1,8 @@
 "This is a basic app to create/read/write .e6b files"
 import tkinter as tk
+
 from e6b_main import Main
+
 
 class App(tk.Tk):
     "Main window"

@@ -3,8 +3,9 @@
     "debug-mode": true,
     "clear-terminal": true,
     "path": "out",
-    "header-name": "header_name_here",
-    "header-version": "version_here",
-    "username": "username_here",
-    "rate-limit": 1
+    "header-name": "name",
+    "header-version": "version",
+    "username": "username",
+    "rate-limit": 1,
+    "toolwindow": false
 }

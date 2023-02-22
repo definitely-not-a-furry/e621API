@@ -1,4 +1,4 @@
-# e621API
+#e621API
 ---
 e621API is a program that can be used to download large amounts of media (pictures, videos, flash media etc.) from [e621.net](https://e621.net/).
 The name might be a little bit misleading: e621API is **not** an application programming interface for e621.

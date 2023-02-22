@@ -1,9 +1,11 @@
 "Module for e6b_manager.py"
+import json
 from tkinter import END
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askyesno
-import json
+
 import download
+
 
 class Main():
     "Main functions"
@@ -33,7 +35,7 @@ class Main():
 
     def saveas(self,_text):
         "Prompts user to save file with a name"
-        self.filename = asksaveasfilename(filetypes=(('e621 bulk file','*.e6b'),
+        self.filename=asksaveasfilename(filetypes=(('e621 bulk file','*.e6b'),
         ('All Files','*.*')),confirmoverwrite=True)
 
         with open(self.filename,'r+',encoding='UTF-8') as file:
